@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+      <title>Motif Generation Tool</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/pageStyle.css') }}">
+  </head>
+
+  <body>
+    <header class="title">
+        <div class="screen-media-diff">
+          <h1>Motif Generation Tool</h1>
+          <p>Takes constraints as input and generates motifs.</p>
+        </div>
+    </header>
+
+    <section>
+      <div class="screen-media-diff">
+        <section>
+          <div class="container">
+            <form  method="POST" enctype="multipart/form-data" >
+              <div class="constraints-style">
+                <label style="color: #222;"><b>Keys and Payloads Information:</b></label>
+              </div>
+              <!-- Input Keys and Payloads Info -->
+              <div id="page-box" style="overflow:hidden;margin-top: 0;padding-top: 0;">
+                <ul style="overflow:hidden;border-top:0;margin-top: 0;padding-top: 0;">
+                  <li style="border-top:0; margin-top: 0;padding-top: 0;">
+                    <p>
+                      <label><u>Payloads:</u></label> <br><br>
+                      <span class="table-style">
+                        <span>
+                          <label style="padding-right: 10px;">Number of payloads:</label><input style="width:90%;max-width: 200px;" name="payloadNum" value="{{form['payloadNum']}}" type="number" pattern="[0-9]" min=1 required>
+                        </span>
+                        <span>
+                          <label style="padding-right: 10px;">Size of payloads:</label><input style="width:90%;max-width: 200px;" name="payloadSize" value="{{form['payloadSize']}}" type="number" pattern="[0-9]" min=1 required>
+                        </span>
+                      </span> <br><br>
+                      <label><u>Keys:</u></label> <br><br>
+                      <span class="table-style">
+                        <span>
+                          <label style="padding-right: 10px;">Number of keys:</label><input name="keyNum" style="width:90%;max-width: 200px;" id="keySize" value="{{form['keyNum']}}" type="number" pattern="[0-9]" min=1 required>
+                        </span>
+                        <span>
+                          <label style="padding-right: 10px;">Size of keys:</label><input name="keySize" style="width:90%;max-width: 200px;" id="keySize" value="{{form['keySize']}}" type="number" pattern="[0-9]" min=1 required>
+                        </span>
+                      </span>
+                    </p>
+                  </li>
+                  </ul>
+                </div>
+              <div style="padding-top: 20px;"></div>
+
+              <!-- Constraints Selection -->
+              <label for="constraints">Select constraints:</label>
+              <select name="constraints" id="constraints">
+                <option value="select">Select</option>
+                <option name="hom" value="homopolymer">Homopolymer</option>
+                <option name="motifGcContent" value="gcmotif">GC-Content</option>
+                <option value="hairpin">Hairpin</option>
+              </select>
+
+              <input id="homSelected" name="hom" value="" hidden>
+              <input id="motifGcContentSelected" name="motifGcContent" value="" hidden>
+              <input id="hairpinSelected" name="hairpin" value="" hidden>
+
+              <input id="homVisible" name="homVisible" value="{{form['homVisible']}}" hidden>
+              <input id="hairpinVisible" name="hairpinVisible" value="{{form['hairpinVisible']}}" hidden>
+              <input id="gcVisible" name="gcVisible" value="{{form['gcVisible']}}" hidden>
+
+              <!-- Constraints -->
+              <div id="page-box" style="overflow:hidden;">
+                <ul style="overflow:hidden;">
+                  <!-- Homopolymers -->
+                  <li id="homopolymer" style="visibility:hidden; height:0;overflow:hidden;">
+                    <input id="checkbox" type="checkbox">
+                    <i></i>
+                    <div class="constraints-style">
+                      <input class="rem" style="width:20px;margin:0;background-color: transparent;border-color: transparent;padding:0px;font-size: 15px;" onclick="removeHomopolymer()"><label style="color:royalblue">&#10006;</label></input>
+                      <b style="padding-left:30px">Homopolymer</b>
+                    </div>
+                    <p>
+                      <span class="table-style">
+                        <span>
+                          <label style="padding-right: 10px;">Max homopolymer length:</label><input name="maxHomopolymer" value="{{form['maxHomopolymer']}}" type="number" pattern="[0-9]" min=0 required>
+                        </span>
+                      </span>
+                    </p>
+                  </li>
+                  <!-- GC-Content -->
+                  <li id="gcmotif" style="visibility:hidden; height:0;overflow:hidden;">
+                    <input id="checkbox" type="checkbox">
+                    <i></i>
+                    <div class="constraints-style">
+                      <input class="rem" style="width:20px;color:royalblue;background-color: transparent;border-color: transparent;padding:0px;font-size: 15px;" onclick="removeMotifGcContent()"><label style="color:royalblue">&#10006;</label></input>
+                      <b style="padding-left:30px">GC-Content</b>
+                    </div>
+                    <p>
+                      <span class="table-style">
+                        <span>
+                          <label style="padding-right: 10px;">Min percentage (%):</label><input name="gcContentMinPercentage" value="{{form['gcContentMinPercentage']}}" type="number" pattern="[0-9]" step="0.01" min=0 max=100 required>
+                        </span>
+                        <span>
+                          <label style="padding-right: 10px;">Max percentage (%):</label><input name="gcContentMaxPercentage" value="{{form['gcContentMaxPercentage']}}" type="number" pattern="[0-9]" step="0.01" min=0 max=100 required>
+                        </span>
+                      </span>
+                    </p>
+                  </li>
+                  <!-- Hairpins -->
+                  <li id="hairpin" style="visibility:hidden; height:0;overflow:hidden;">
+                    <input id="checkbox" type="checkbox">
+                    <i></i>
+                    <div class="constraints-style">
+                    <input class="rem" style="width:20px;color:royalblue;background-color: transparent;border-color: transparent;padding:0px;font-size: 15px;" onclick="removeHairpin()"><label style="color:royalblue">&#10006;</label></input>
+                    <b style="padding-left:30px">Hairpin</b></div>
+                    <p>
+                      <span class="table-style">
+                        <span>
+                          <label style="padding-right: 10px;">Hairpin stem length:</label><input name="maxHairpin" value="{{form['maxHairpin']}}" type="number" pattern="[0-9]" min=1 max=100 required>
+                        </span>
+                      </span><br>
+                      <span class="table-style">
+                        <span>
+                          <label style="padding-right: 10px;">Hairpin min loop length:</label><input name="loopMin" value="{{form['loopMin']}}" type="number" pattern="[0-9]" min=1 max=100 required>
+                        </span>
+                        <span>
+                          <label style="padding-right: 10px;">Hairpin max loop length:</label><input name="loopMax" value="{{form['loopMax']}}" type="number" pattern="[0-9]" min=1 max=100 required>
+                        </span>
+                      </span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Validation Button -->
+              <div style="text-align: right;">
+                <button class='valid-button float-right' type="submit" name="analyseSeqSubmission" method="POST" value="Analyse sequence">Generate Motifs</button>
+              </div>
+
+            </form><!-- End form -->
+          </div><!-- End Container -->
+        </section><!-- End Section -->
+
+
+        <!-- Output -->
+        {% if submitted %}
+        <section>
+          <div class="container">
+            <div class="row">
+              <div class="col-6">
+                {% if isValid %}
+                <h1 style="text-align: center; font-size: 20px;">Generated Motifs!</h1>
+                {% else %}
+                <h1 style="text-align: center; font-size: 20px;">Could not generate motifs...try again!</h1>
+                <div style="margin-top: 10px;"></div>
+                {% endif %}
+
+                {% if isValid %}
+                <label><b>Motifs:</b></label>
+                <div class="resizable-div" id="seqAnalysis">
+                  {{motifs}}
+                </div>
+
+                <div style="margin-top: 10px;"></div>
+
+                <label><b>Keys:</b></label>
+                <div class="resizable-div" id="seqAnalysis">
+                  {{keys}}
+                </div>
+
+                <label><b>Payloads:</b></label>
+                <div class="resizable-div" id="seqAnalysis">
+                  {{payloads}}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </section>
+        {% endif %}
+
+        <!-- Javascript -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+        <script  src="js/script.js"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" 
+                integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" 
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      </div>
+    </section>
+  </body>
+</html>
