@@ -1,6 +1,6 @@
 import numpy as np
-from ..dna_language_specification.language import nucleotides, converse
-from ..hyperparameters.hyperparameters import Hyperparameters
+from dna_language_specification.language import nucleotides, converse
+from hyperparameters.hyperparameters import Hyperparameters
 
 class Hairpin:
     def __init__(self, constraints, hyperparams=None):
