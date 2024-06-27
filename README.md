@@ -47,10 +47,10 @@ The hypTun.txt file inside of the hyperparameters folder holds the output of the
 The hypTun2.txt file inside of the hyperparameters folder holds the output of the hyperparameter_tuning.py file with the following input for shape values (weight values are set to 1):
 
 ```bash
-shape_values = {'hom': [50, 55, 60, 65, 70], \
-                'hairpin': [2, 4, 6, 8, 10], \
-                'similarity': [50, 55, 60, 65, 70], \
-                'gcContent': [7, 10, 13, 16, 19], \
+shape_values = {'hom': [50, 55, 60, 65, 70], 
+                'hairpin': [2, 4, 6, 8, 10], 
+                'similarity': [50, 55, 60, 65, 70], 
+                'gcContent': [7, 10, 13, 16, 19], 
                 'noKeyInPayload': [15, 20, 35, 40, 45]
                 }
 ```
