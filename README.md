@@ -42,9 +42,9 @@ To run the hyperparameter tuning, run the following command from inside the moti
 python -m hyperparameters.hyperparameter_tuning run
 ```
 
-The hypTun.txt file inside of the hyperparameters folder holds the output of the hyperparameter_tuning.py file with shape values [10, 20, 30, 40, 50], and weight values set to 1.
+The hypTun.txt file inside of the hyperparameters folder holds the output of the first round of hyperparameter tuning. It is the result of running the hyperparameter_tuning.py file with shape values [10, 20, 30, 40, 50], and weight values set to 1.
 
-The hypTun2.txt file inside of the hyperparameters folder holds the output of the hyperparameter_tuning.py file with the following input for shape values (weight values are set to 1):
+The hypTun2.txt file inside of the hyperparameters folder holds the output of the second round of hyperparameter tuning. It is the result of the hyperparameter_tuning.py file with the following input for shape values (weight values are set to 1):
 
 ```bash
 shape_values = {'hom': [50, 55, 60, 65, 70], 
@@ -54,6 +54,10 @@ shape_values = {'hom': [50, 55, 60, 65, 70],
                 'noKeyInPayload': [15, 20, 35, 40, 45]
                 }
 ```
+
+To view the results in form of a heatmap, run the dataExtract() function inside of the hyperparameter_tuning.py file.
+The results of the first and second round of hyperparamter tuning can be found inside of the figures folder (motif_generation_tool/hyperparameters/figures).
+
 ### Tests
 
 To run the tests, first go to the root directory.
