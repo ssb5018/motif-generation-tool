@@ -17,6 +17,7 @@ class Hyperparameters:
         self.hairpin = ConstraintHyperparameters()
         self.gc_content = ConstraintHyperparameters()
         self.similarity = ConstraintHyperparameters()
+        self.no_key_in_payload = ConstraintHyperparameters()
 
         for constraint in shape_hyperparameters:
             self.set_shape_hyperparameter(constraint, shape_hyperparameters[constraint])
@@ -33,6 +34,8 @@ class Hyperparameters:
             self.gc_content.set_shape_hyperparameter(hyperparameter)
         elif constraint == 'similarity':
             self.similarity.set_shape_hyperparameter(hyperparameter)
+        elif constraint == 'noKeyInPayload':
+            self.no_key_in_payload.set_shape_hyperparameter(hyperparameter)
 
     def set_weight_hyperparameter(self, constraint, hyperparameter):
         if constraint == 'hom':
@@ -43,3 +46,5 @@ class Hyperparameters:
             self.gc_content.set_weight_hyperparameter(hyperparameter)
         elif constraint == 'similarity':
             self.similarity.set_weight_hyperparameter(hyperparameter)
+        elif constraint == 'noKeyInPayload':
+            self.no_key_in_payload.set_weight_hyperparameter(hyperparameter)
