@@ -1,5 +1,5 @@
 from .key_log_score import KeyLogScore
-from ..dna_language_specification.language import nucleotides
+from dna_language_specification.language import nucleotides
 
 import numpy as np
 

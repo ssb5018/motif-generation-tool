@@ -1,6 +1,6 @@
 import numpy as np
-from ..dna_language_specification.language import nucleotides, converse
-from ..constraints.hairpin import Hairpin
+from dna_language_specification.language import nucleotides, converse
+from constraints.hairpin import Hairpin
 
 
 class KeyLogScore:
