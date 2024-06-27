@@ -39,7 +39,7 @@ python -m key_payload_builder run
 
 To run the hyperparameter tuning, run the following command from inside the motif_generation_tool directory:
 ```bash
-python -m key_payload_builder run
+python -m hyperparameters.hyperparameter_tuning run
 ```
 
 The hypTun.txt file inside of the hyperparameters folder holds the output of the hyperparameter_tuning.py file with shape values [10, 20, 30, 40, 50], and weight values set to 1.
@@ -56,13 +56,13 @@ shape_values = {'hom': [50, 55, 60, 65, 70],
 ```
 ### Tests
 
-To run the tests, first go to the unit_tests directory (motif_generation_tool/unit_tests).
+To run the tests, first go to the root directory.
 
 Run tests using the following command line: 
 ```bash
-pytest filename.py
+python3 -m pytest unit_tests/[insert file name].py
 ```
 For example: 
 ```bash
-pytest hairpin_tests.py
+python3 -m pytest unit_tests/hairpin_tests.py
 ```
