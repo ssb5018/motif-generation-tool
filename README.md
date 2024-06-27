@@ -35,7 +35,7 @@ To run the Motif Generation Tool, run the following command from inside the moti
 python -m key_payload_builder run
 ```
 
-#### Hyperparameter Output
+#### Hyperparameter Tuning
 
 To run the hyperparameter tuning, run the following command from inside the motif_generation_tool directory:
 ```bash
