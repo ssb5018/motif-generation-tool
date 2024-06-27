@@ -1,6 +1,6 @@
 import numpy as np
-from ..dna_language_specification.language import nucleotides, converse
-from ..constraints.hairpin import Hairpin
+from dna_language_specification.language import nucleotides, converse
+from constraints.hairpin import Hairpin
 
 
 class PayloadLogScore:
@@ -43,6 +43,7 @@ class PayloadLogScore:
         self.hairpin_hyperparams = hyperparams.hairpin
         self.gc_content_hyperparams = hyperparams.gc_content
         self.similarity_hyperparams = hyperparams.similarity
+        self.no_key_in_payload_hyperparams = hyperparams.no_key_in_payload
 
     ### Get Log Score ###
 
@@ -51,6 +52,7 @@ class PayloadLogScore:
         log_score += self.get_hairpin_log_score(payload, base)
         log_score += self.get_gc_log_score(payload, base)
         log_score += self.get_similarity_log_score(payload, base)
+        log_score += self.get_no_key_in_payload_log_score(payload, base)
         return log_score
 
     def get_homopolymer_log_score(self, payload, base):
@@ -68,6 +70,10 @@ class PayloadLogScore:
     def get_similarity_log_score(self, payload, base):
         cur_payload = payload + base
         return self.similarity_log_score(cur_payload)
+    
+    def get_no_key_in_payload_log_score(self, payload, base):
+        cur_payload = payload + base
+        return self.no_key_in_payload_log_score(cur_payload)
 
     ##### Add Payloads and Keys #####
 
@@ -300,4 +306,22 @@ class PayloadLogScore:
             else:
                 break
         return - self.similarity_hyperparams.shape**(window_size / self.max_hairpin) + 1
+    
+    ### No Key in Payload Log Score ###
+
+    def no_key_in_payload_log_score(self, cur_payload):
+        if not cur_payload:
+            return 0
+        window_size = 0
+        unit = {'A':0, 'T':1, 'C':2, 'G':3}
+        for key in self.keys:
+            for i in range(1, min(len(cur_payload), self.key_size)):
+                index = len(cur_payload) - 1 - i
+                if cur_payload[index:] in key:
+                    window_size = max(window_size, i)
+                    if window_size == self.key_size:
+                        return -np.inf
+                else:
+                    break
+        return - self.no_key_in_payload_hyperparams.shape**(window_size / self.key_size) + 1
 

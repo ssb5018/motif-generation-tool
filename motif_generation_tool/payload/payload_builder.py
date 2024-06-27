@@ -1,7 +1,7 @@
 from .payload_log_score import PayloadLogScore
-from ..constraints.constraints import Constraints
-from ..hyperparameters.hyperparameters import Hyperparameters
-from ..dna_language_specification.language import nucleotides
+from constraints.constraints import Constraints
+from hyperparameters.hyperparameters import Hyperparameters
+from dna_language_specification.language import nucleotides
 
 import numpy as np
 
@@ -55,6 +55,12 @@ class PayloadBuilder:
                         similarity_log_score = \
                                         self.payload_log_score.get_similarity_log_score(payload, n)
                         log_scores[index] += weight * similarity_log_score
+                    elif constraint == 'noKeyInPayload':
+                        weight = self.hyperparams.no_key_in_payload.weight
+                        no_key_in_payload_log_score = self.payload_log_score.get_no_key_in_payload_log_score(payload, n)
+                        log_scores[index] += weight * no_key_in_payload_log_score
+                        if log_scores[index] == -np.inf:
+                            break
             
             if not with_constraints: 
                 p = np.array([0.25, 0.25, 0.25, 0.25])
