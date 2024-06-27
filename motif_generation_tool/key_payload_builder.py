@@ -1,5 +1,5 @@
-from .payload.payload_builder import PayloadBuilder
-from .key.key_builder import KeyBuilder
+from payload.payload_builder import PayloadBuilder
+from key.key_builder import KeyBuilder
 
 import numpy as np
 
@@ -67,18 +67,18 @@ class KeyPayloadBuilder:
     
 
 async def main():
-    from .constraints.constraints import Constraints
-    from .hyperparameters.hyperparameters import Hyperparameters
-    payload_size = 8
-    payload_num = 5
-    max_hom = 1
+    from constraints.constraints import Constraints
+    from hyperparameters.hyperparameters import Hyperparameters
+    payload_size = 60
+    payload_num = 15
+    max_hom = 5
     max_hairpin = 1
-    loop_size_min = 1
-    loop_size_max = 2
+    loop_size_min = 6
+    loop_size_max = 7
     min_gc = 25
-    max_gc = 60
-    key_size = 1
-    key_num = 5
+    max_gc = 65
+    key_size = 20
+    key_num = 8
     
     constraints = Constraints(payload_size=payload_size, payload_num=payload_num, \
                               max_hom=max_hom, max_hairpin=max_hairpin, \
@@ -86,23 +86,25 @@ async def main():
                               key_num=key_num, loop_size_min=loop_size_min, \
                               loop_size_max=loop_size_max)
 
-    num_rounds = 1
+    num_rounds = 10000
     num_successful_keys = 0
-    with_constraints = {'hom', 'gcContent', 'hairpin'}
+    with_constraints = {'hom', 'gcContent', 'hairpin', 'noKeyInPayload'}
     for i in range(num_rounds):
-        shapes = {'hom': 70, 'gcContent': 20, 'hairpin': 8, 'similarity': 50}
-        weights = {'hom': 1, 'gcContent': 1, 'hairpin': 1, 'similarity': 1}
-        hyperparams = Hyperparameters(shapes, weights)
+        for weight in [1]:
 
-        keyPayloadBuilder = KeyPayloadBuilder(constraints, hyperparams)
-        keys, payloads = await keyPayloadBuilder.build_keys_and_payloads(with_constraints)
-        if not (keys and payloads):
-            continue
-        print('keys: ', keys)
-        print('payloads: ', payloads)
-        num_successful_keys += 1
+            shapes = {'hom': 70, 'gcContent': 10, 'hairpin': 8, 'similarity': 60, 'noKeyInPayload': 45}
+            weights = {'hom': 1, 'gcContent': 1, 'hairpin': 1, 'similarity': 1, 'noKeyInPayload': 1}
+            hyperparams = Hyperparameters(shapes, weights)
 
-    print('Number of motif sets conforming to the constraints is ', num_successful_keys)
+            keyPayloadBuilder = KeyPayloadBuilder(constraints, hyperparams)
+            keys, payloads = await keyPayloadBuilder.build_keys_and_payloads(with_constraints)
+            if not (keys and payloads):
+              continue
+            # print('keys: ', keys)
+            # print('payloads: ', payloads)
+            num_successful_keys += 1
+
+    print('Number of motif sets conforming to the constraints is ', num_successful_keys) # Output: 9285
 
 if __name__ == '__main__':
     import asyncio
