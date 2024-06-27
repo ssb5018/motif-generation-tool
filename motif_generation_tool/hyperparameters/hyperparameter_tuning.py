@@ -136,80 +136,80 @@ async def main():
     await hyp_tuning.grid_search(constraints, shape_values, weight_values, with_constraints)
 
 def corIndexGc(line):
-    if (" 'gcContent': 10}" in line):
+    if (" 'gcContent': 7}" in line):
         return 0
-    if (" 'gcContent': 20}" in line):
+    if (" 'gcContent': 10}" in line):
         return 1
-    if (" 'gcContent': 30}" in line):
+    if (" 'gcContent': 13}" in line):
         return 2
-    if (" 'gcContent': 40}" in line):
+    if (" 'gcContent': 16}" in line):
         return 3
-    if (" 'gcContent': 50}" in line):
+    if (" 'gcContent': 19}" in line):
         return 4
     
 def corIndexHom(line):
-    if ("apes: {'hom': 10, " in line):
-        return 0
-    if ("apes: {'hom': 20, " in line):
-        return 1
-    if ("apes: {'hom': 30, " in line):
-        return 2
-    if ("apes: {'hom': 40, " in line):
-        return 3
     if ("apes: {'hom': 50, " in line):
+        return 0
+    if ("apes: {'hom': 55, " in line):
+        return 1
+    if ("apes: {'hom': 60, " in line):
+        return 2
+    if ("apes: {'hom': 65, " in line):
+        return 3
+    if ("apes: {'hom': 70, " in line):
         return 4
     
 def corIndexHairpin(line):
-    if (", 'hairpin': 10, " in line):
+    if (", 'hairpin': 2, " in line):
         return 0
-    if (", 'hairpin': 20, " in line):
+    if (", 'hairpin': 4, " in line):
         return 1
-    if (", 'hairpin': 30, " in line):
+    if (", 'hairpin': 6, " in line):
         return 2
-    if (", 'hairpin': 40, " in line):
+    if (", 'hairpin': 8, " in line):
         return 3
-    if (", 'hairpin': 50, " in line):
+    if (", 'hairpin': 10, " in line):
         return 4
     
 def corIndexSim(line):
-    if (", 'similarity': 10, " in line):
-        return 0
-    if (", 'similarity': 20, " in line):
-        return 1
-    if (", 'similarity': 30, " in line):
-        return 2
-    if (", 'similarity': 40, " in line):
-        return 3
     if (", 'similarity': 50, " in line):
+        return 0
+    if (", 'similarity': 55, " in line):
+        return 1
+    if (", 'similarity': 60, " in line):
+        return 2
+    if (", 'similarity': 65, " in line):
+        return 3
+    if (", 'similarity': 70, " in line):
         return 4
     
 def corIndexKey(line):
-    if (", 'noKeyInPayload': 10, " in line):
+    if (", 'noKeyInPayload': 15, " in line):
         return 0
     if (", 'noKeyInPayload': 20, " in line):
         return 1
-    if (", 'noKeyInPayload': 30, " in line):
+    if (", 'noKeyInPayload': 35, " in line):
         return 2
     if (", 'noKeyInPayload': 40, " in line):
         return 3
-    if (", 'noKeyInPayload': 50, " in line):
+    if (", 'noKeyInPayload': 45, " in line):
         return 4
+    
 
 def dataExtract():
-    homData = [0,0,0,0,0]
-    gcContent = [0,0,0,0,0]
     data = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
-    with open(os.path.join(os.path.dirname(__file__), "hypTun.txt"), "r") as file:
+    with open(os.path.join(os.path.dirname(__file__), "hypTun2.txt"), "r") as file:
         while line := file.readline():
-          data[corIndexHom(line)][corIndexKey(line)] += int(line.split('totalSuccesses: ')[1])
+          data[corIndexHom(line)][corIndexGc(line)] += int(line.split('totalSuccesses: ')[1])
     import seaborn as sn
-    import matplotlib.pyplot as plt 
     # plotting the heatmap 
-    hm = sn.heatmap(data = data, cmap = 'Blues') 
+    hm = sn.heatmap(data = data, cmap = 'Blues', yticklabels=[50,55,60,65,70], xticklabels=[7,10,13,16,19]) 
+    hm.set(ylabel="Homopolymer", xlabel="GC-Content")
     hm.invert_yaxis()
     
-    # displaying the plotted heatmap 
-    plt.show()
+    # saving the plotted heatmap inside of the figures folder
+    figure = hm.get_figure()    
+    figure.savefig('hyperparameters/figures/round_two/hom_gc_heatmap.png', dpi=400)
     print(data)
 
 
