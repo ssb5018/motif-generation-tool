@@ -87,7 +87,7 @@ async def main():
                               loop_size_max=loop_size_max)
 
     num_rounds = 10000
-    num_successful_keys = 0
+    num_successful_motifs = 0
     with_constraints = {'hom', 'gcContent', 'hairpin', 'noKeyInPayload'}
     for i in range(num_rounds):
         for weight in [1]:
@@ -102,9 +102,9 @@ async def main():
               continue
             # print('keys: ', keys)
             # print('payloads: ', payloads)
-            num_successful_keys += 1
+            num_successful_motifs += 1
 
-    print('Number of motif sets conforming to the constraints is ', num_successful_keys) # Output: 9285
+    print('Number of motif sets conforming to the constraints is ', num_successful_motifs) # Output: 9285
 
 if __name__ == '__main__':
     import asyncio
